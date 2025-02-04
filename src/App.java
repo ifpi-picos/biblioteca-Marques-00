@@ -3,71 +3,68 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.util.List;
 
-public class App{
+public class App {
 
     private static List<Livro> livros = new ArrayList<>();// lista para armazenar os livros.
     private static List<Emprestimo> emprestimos = new ArrayList<>(); // lista para armazenar os emprestimos
     private static List<Usuario> usuarios = new ArrayList<>(); // lista de usuarios
-    
 
-public static void main (String[]args){
-    Scanner scanner = new Scanner (System.in);
-    int opcao = -1;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int opcao = -1;
 
+        while (opcao != 0) {
+            System.out.println("\nSISTEMA BIBLIOTECA");
+            System.out.println("1. Cadastrar livro");
+            System.out.println("2. Cadastrar usuário");
+            System.out.println("3. Listar livros cadastrados");
+            System.out.println("4. Listar livros emprestados e disponiveis");
+            System.out.println("5. Listar histórico de emprestimos");
+            System.out.println("6. Realizar emprestimo");
+            System.out.println("7. Devolver livro");
+            System.out.println("0. Sair do programa");
+            System.out.print("Digite uma das opções acima: ");
 
-while (opcao != 0){
-    System.out.println("SISTEMA BIBLIOTECA");
-    System.out.println("1. Cadastrar livro");
-    System.out.println("2. Cadastrar usuário");
-    System.out.println("3. Listar livros cadastrados");
-    System.out.println("4. Listar livros emprestados e disponiveis");
-    System.out.println("5. Listar histórico de emprestimos");
-    System.out.println("6. Realizar emprestimo");
-    System.out.println("7. Devolver livro");
-    System.out.println("8. Sair do programa");
-    System.out.print("Digite uma das opções acima: ");
+            if (scanner.hasNext()) {
+                opcao = scanner.nextInt();
+                scanner.nextLine();
+                switch (opcao) {
+                    case 1:
+                        cadastrarLivro(scanner);
+                        break;
+                    case 2:
+                        cadastrarUsuario(scanner);
+                        break;
+                    case 3:
+                        listarLivrosCadastrados();
+                        break;
+                    case 4:
+                        listarLivrosEmprestadosEDisponiveis();
+                        break;
+                    case 5:
+                        listarHistoricoDeEmprestimos();
+                        break;
+                    case 6:
+                        realizarEmprestimo(scanner);
+                        break;
+                    case 7:
+                        devolverLivroDoEmprestimo(scanner);
+                        break;
+                    case 8:
+                    case 0:
+                        System.out.println("Saindo do programa...");
+                        break;
+                    default:
+                        System.out.println("Opção inválida!Tente novamente");
+                }
 
-    if (scanner.hasNext()){
-        opcao = scanner.nextInt ();
-        scanner.nextLine();
-     switch (opcao) {
-        case 1:
-        cadastrarLivro (scanner);
-        break;
-        case 2:
-        cadastrarUsuario (scanner);
-        break;
-        case 3:
-        listarLivrosCadastrados ();
-        break;
-        case 4:
-        listarLivrosEmprestadosEDisponiveis ();
-        break;
-        case 5:
-        listarHistoricoDeEmprestimos ();
-        break;
-        case 6:
-        realizarEmprestimo (scanner);
-        break;
-        case 7:
-        devolverLivroDoEmprestimo (scanner);
-        break;
-        case 0:
-        System.out.println("Saindo do programa...");
-        break;
-        default:
-        System.out.println("Opção inválida!Tente novamente");
-     }   
+            } else {
+                System.out.println("Entrada inválida! Por favor, insira um número.");
+                scanner.nextLine();
+            }
+        }
+        scanner.close();
 
-    } else {
-        System.out.println("Entrada inválida! Por favor, insira um número.");
-        scanner.nextLine();
-    }
-    }
-    scanner.close();
-
-    
-        
     }
 
     // MÉTODO PARA O CADASTRO DE LIVROS
@@ -125,7 +122,7 @@ while (opcao != 0){
 
     // MÉTODO PARA CADASTRO DE USUÁRIOS
     private static void cadastrarUsuario(Scanner scanner) {
-        String nome, cpf, email;
+        String nome, cpf, email, preferenciaDeNotificacao;
 
         while (true) {
             System.out.print("NOME: ");
@@ -156,8 +153,23 @@ while (opcao != 0){
             }
             break;
         }
+        // NOVAS LINHAS (WHILE)
+        while (true) {
+            System.out.println("\nEscolha como deseja receber as suas notificações");
+            System.out.println("1 - SMS");
+            System.out.println("2 - WhatsApp");
+            System.out.println("3 - E-mail");
+            System.out.print("Opção: ");
+            preferenciaDeNotificacao = scanner.nextLine().trim();
+            if (email.isEmpty()) {
+                System.out.println("A preferência de notificações é obrigatório!");
+                continue;
+            }
+            break;
+        }
 
-        Usuario usuario = new Usuario(nome, cpf, email); // cria o objeto usuário e adicionar à lista
+        Usuario usuario = new Usuario(nome, cpf, email, preferenciaDeNotificacao); // cria o objeto usuário e adicionar
+                                                                                   // à lista
         usuarios.add(usuario);
         System.out.println("Usuário cadastrado com sucesso!");
     }
@@ -185,7 +197,7 @@ while (opcao != 0){
                 System.out.println("Autor: " + livro.getAutor());
                 System.out.println("Editora: " + livro.getEditora());
                 System.out.println("Ano: " + livro.getAno());
-                System.out.println("Disponível: " + (livro.isDisponivel() ? "Sim" : "Não")); 
+                System.out.println("Disponível: " + (livro.isDisponivel() ? "Sim" : "Não"));
                 System.out.println();
             }
         }
@@ -259,11 +271,11 @@ while (opcao != 0){
 
         // registro do empréstimo
         Emprestimo emprestimo = new Emprestimo(
-            LocalDate.now().plusDays(14),
+                LocalDate.now().plusDays(14),
                 LocalDate.now(),
-            usuario, // usuário será adicionado posteriormente quando implementado
+                usuario, // usuário será adicionado posteriormente quando implementado
 
-        livroSelecionado);
+                livroSelecionado);
         livroSelecionado.setDisponivel(false); // atualizar status de disponibilidade do livro
         emprestimos.add(emprestimo);
 
@@ -271,6 +283,27 @@ while (opcao != 0){
         System.out.println("Livro: " + livroSelecionado.getTitulo());
         System.out.println("Usuário: " + usuario.getNome());
         System.out.println("Data de devolução: " + emprestimo.getDataDevolucao());
+
+        // nova linha
+        notificarUsuario(usuario, "Emprestimo realizado. Livro: " + livroSelecionado.getTitulo());
+    }
+
+    // NOVAS LINHAS
+    private static void notificarUsuario(Usuario usuario, String mensagem) {
+        Notificacao notificacao = criarNotificacao(usuario.getPreferenciaDeNotificacao());
+        notificacao.enviarNotificacao(usuario, mensagem);
+    }
+
+    private static Notificacao criarNotificacao(String preferencia) {
+        switch (preferencia) {
+            case "1":
+                return new NotificacaoSMS();
+            case "2":
+                return new NotificacaoWhatsApp();
+            case "3":
+            default:
+                return new NotificacaoEmail();
+        }
     }
 
     // MÉTODO PARA DEVOLVER LIVRO QUE FOI EMPRESTADO
