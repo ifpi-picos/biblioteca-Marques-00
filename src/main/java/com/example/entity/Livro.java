@@ -1,29 +1,34 @@
+
+package com.example.entity;
+import java.util.List; 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Livro {
-    private String autor;
+    private int id; // Novo campo ID
     private String titulo;
+    private String autor;
     private String editora;
     private int ano;
     private boolean disponivel;
-    private List<Usuario> listaReservas; // Nova linha
-
-    public Livro(String autor, String titulo, String editora, int ano, boolean disponivel) {
-        this.autor = autor;
+    private List<Usuario> listaReservas; // Lista de usuários que reservaram o livro 
+    
+    public Livro(int id, String titulo, String autor, String editora, int ano, boolean disponivel) {
+        this.id = id;
         this.titulo = titulo;
+        this.autor = autor;
         this.editora = editora;
         this.ano = ano;
         this.disponivel = disponivel;
-        this.listaReservas = new ArrayList<>(); // nova linha
+        this.listaReservas = new ArrayList<>();
     }
 
-    public String getAutor() {
-        return autor;
+    // Getters e setters para o ID
+    public int getId() {
+        return id;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitulo() {
@@ -34,6 +39,14 @@ public class Livro {
         this.titulo = titulo;
     }
 
+    public String getAutor() {
+        return autor;
+    }
+    
+    public void setAutor(String autor) {
+        this.autor = autor;
+    }
+    
     public String getEditora() {
         return editora;
     }
@@ -56,11 +69,10 @@ public class Livro {
 
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
-
     }
 
-    // nova linha
-    public void reservarLivro(Usuario usuario) {
+    // Métodos para reservas
+    public void reservarLivro(Usuario usuario) { 
         listaReservas.add(usuario);
     }
 
@@ -71,5 +83,4 @@ public class Livro {
     public void limparReservas() {
         listaReservas.clear();
     }
-
 }
